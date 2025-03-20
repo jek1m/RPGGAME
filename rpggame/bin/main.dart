@@ -26,8 +26,6 @@ class Character {
 }
 
 void loadCharacterStats() {
-
-
   try {
     final file = File('assets/characters.txt');
     final contents = file.readAsStringSync();
@@ -48,45 +46,34 @@ void loadCharacterStats() {
   }
 }
 
+class Monster {
+  String? monsterName;
+  int? monsterHealth;
+  int? attackMax;
+  int defensePower = 0;
 
-void main() {
-  //String name = getCharacterName();
-  //print(name);
-  //var file1 = File('characters.txt');
-  // var file1 = File('C:/Users/jieun/rpggame/RPGGAME/rpggame/assets/characters.txt');
-  // final contents = file1.readAsStringSync();
-  // final stats = contents.split(',');
-  // int health = int.parse(stats[0]);
-  // print(health);
-  loadCharacterStats();
-
-
+  Monster(monsterName, monsterHealth, attackMax, defensePower);
 }
 
-// class Character {
-//   String? name;
-//   int? health;
-//   int? attackPower;
-//   int? defensePower;
+void loadMonsterStats(n) {
+  try {
+    final file = File('assets/monsters.txt');
+    final lines = file.readAsLinesSync();
+    final stats = lines[n].split(',');
+    String monsterName = stats[0];
+    int monsterHealth = int.parse(stats[1]);
+    int attackMax = int.parse(stats[2]);
+    Monster monster = Monster(monsterName, monsterHealth, attackMax, 0);
+    print(attackMax);
+  } catch (e) {
+    print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
+    exit(1);
+  }
+}
 
-//   Character(this.name, this.health, this.attackPower, this.defensePower);
-// }
 
-// void loadCharacterStats() {
-//   try {
-//     final file = File('characters.txt');
-//     final contents = file.readAsStringSync();
-//     final stats = contents.split(',');
-//     if (stats.length != 3) throw FormatException('Invalid character data');
-      
-//     int health = int.parse(stats[0]);
-//     int attack = int.parse(stats[1]);
-//     int defense = int.parse(stats[2]);
-      
-//     String name = getCharacterName();
-//     // character = Character(name, health, attack, defense);
-//   } catch (e) {
-//     print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
-//     exit(1);
-//   }
-// }
+
+void main() {
+  loadCharacterStats();
+  loadMonsterStats(1);
+}
