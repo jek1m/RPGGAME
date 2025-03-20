@@ -1,5 +1,23 @@
 import 'dart:io';
 
+class Game {
+  int killmonsters = 0; // 물리친 몬스터 개수 : 몬스터 리스트의 개수보다 클 수 없다.
+  List<Monster> monsterList = [];
+  List<Character> characterList = [];
+
+  void addCharacter(Character character) {
+    characterList.add(character);
+    print("캐릭터가 추가되었습니다: ${character.name}");
+  }
+
+  // void startGame() {
+
+  // }
+
+  // void battle() {
+
+  // }
+}
 
 String getCharacterName() {
   RegExp regex = RegExp(r'^[a-zA-Z가-힣]+$');
@@ -17,15 +35,23 @@ String getCharacterName() {
 }
 
 class Character {
-  String? userName;
-  int? userHealth;
-  int? attackPower;
-  int? defensePower;
+  String? name;
+  int? health;
+  int? attack;
+  int? defense;
+  
+  //Character(name, health, attack, defense); //Character에 4가지 변수를받겠다선언 34번 name과다름
 
-  Character(userName, userHealth, attackPower, defensePower);
+  // Character(newname,health,attack,defense){ //생성자함수시작
+  //   this.name = newname; //34번 name에 40(받은)name을 넣겠다
+  // }
+
+  Character({ //^간소화버전
+    this.name, this.health, this.attack, this.defense
+  });
 }
 
-void loadCharacterStats() {
+Character loadCharacterStats() {
   try {
     final file = File('assets/characters.txt');
     final contents = file.readAsStringSync();
@@ -37,9 +63,10 @@ void loadCharacterStats() {
     int defense = int.parse(stats[2]);
       
     String name = getCharacterName();
-    Character character = Character(name, health, attack, defense);
-    print(name);
-    print(defense);
+    Character character = Character(name : name, health : health, attack : attack, defense : defense); //45번 {}일때 named파라미터 넣기
+    print(character);
+
+    return character;
   } catch (e) {
     print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
     exit(1);
@@ -71,9 +98,8 @@ void loadMonsterStats(n) {
   }
 }
 
-
-
 void main() {
-  loadCharacterStats();
-  loadMonsterStats(1);
+  Game go1 = Game();
+  Character character1 = loadCharacterStats();
+  go1.addCharacter(character1);
 }
