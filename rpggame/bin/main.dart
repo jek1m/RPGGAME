@@ -1,24 +1,70 @@
-import 'dart:io';
+// 작성자 : 플러터 6기 개발 김지은
+// 작성일 : 2025.03.14
+// [Dart 기초] 개인 과제 - 전투 RPG 게임
+// 필수 정의 구현
 
+// import 'dart:ffi';
+import 'dart:io';
+import 'dart:math';
+
+// Game 클래스
 class Game {
   int killmonsters = 0; // 물리친 몬스터 개수 : 몬스터 리스트의 개수보다 클 수 없다.
   List<Monster> monsterList = [];
   List<Character> characterList = [];
+  String name1 = '';
 
-  void addCharacter(Character character) {
+  // characterList에 읽어온 character를 추가하는 기능
+  String addCharacter(Character character) {
     characterList.add(character);
-    print("캐릭터가 추가되었습니다: ${character.name}");
+    String name1 = character.name.toString();
+    return name1;
   }
 
-  // void startGame() {
+  // monsterList에 읽어온 moster를 추가하는 기능
+  void addMonster(Monster monster) {
+    monsterList.add(monster);
+  }
 
-  // }
+  // 게임 시작할 때 처음 캐릭터의 스탯을 보여주는 기능
+  void firstTurn(Character character) {
+    print('게임을 시작합니다!');
+    print('${character.name} - 체력: ${character.health}, 공격력: ${character.attack}, 방어력: ${character.defense}');
+    print('');
+  }
+  // 행동을 선택하는 기능
+  void startGame() {
+    print('행동을 선택하세요 (1: 공격, 2: 방어): ');
+    String? input = stdin.readLineSync(); 
+    int? inputnumber = int.tryParse(input ?? "");
 
-  // void battle() {
+    switch(inputnumber) {
+      case 1:
 
-  // }
+
+      case 2:
+
+      default:  
+
+    }
+
+  }
+
+  void battle() {
+
+  }
+
+  // 랜덤으로 몬스터를 불러오는 기능
+  void getRandomMonster() {
+    var random = Random();
+    int randomNumber = random.nextInt(monsterList.length);
+    print('새로운 몬스터가 나타났습니다!');
+    print('${monsterList[randomNumber].monsterName} - 체력: ${monsterList[randomNumber].monsterHealth}, 공격력: ${monsterList[randomNumber].attackMax}');
+
+  }
 }
 
+// input으로 캐릭터 이름을 입력받는 기능
 String getCharacterName() {
   RegExp regex = RegExp(r'^[a-zA-Z가-힣]+$');
   String? inputName;
@@ -34,23 +80,19 @@ String getCharacterName() {
   return inputName;
 }
 
+// Character 클래스
 class Character {
   String? name;
   int? health;
   int? attack;
   int? defense;
   
-  //Character(name, health, attack, defense); //Character에 4가지 변수를받겠다선언 34번 name과다름
-
-  // Character(newname,health,attack,defense){ //생성자함수시작
-  //   this.name = newname; //34번 name에 40(받은)name을 넣겠다
-  // }
-
-  Character({ //^간소화버전
+  Character({ 
     this.name, this.health, this.attack, this.defense
   });
 }
 
+// chraacters.txt에서 불러오는 기능
 Character loadCharacterStats() {
   try {
     final file = File('assets/characters.txt');
@@ -63,9 +105,7 @@ Character loadCharacterStats() {
     int defense = int.parse(stats[2]);
       
     String name = getCharacterName();
-    Character character = Character(name : name, health : health, attack : attack, defense : defense); //45번 {}일때 named파라미터 넣기
-    print(character);
-
+    Character character = Character(name : name, health : health, attack : attack, defense : defense);
     return character;
   } catch (e) {
     print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
@@ -73,16 +113,25 @@ Character loadCharacterStats() {
   }
 }
 
+// Monster 클래스
 class Monster {
   String? monsterName;
   int? monsterHealth;
   int? attackMax;
   int defensePower = 0;
 
-  Monster(monsterName, monsterHealth, attackMax, defensePower);
+  Monster({
+    this.monsterName, this.monsterHealth, this.attackMax
+  });
+
+  @override
+  String toString() {
+    return '$monsterName $monsterHealth $attackMax $defensePower';
+  }
 }
 
-void loadMonsterStats(n) {
+// monsters.txt에서 불러오는 기능
+Monster loadMonsterStats(n) {
   try {
     final file = File('assets/monsters.txt');
     final lines = file.readAsLinesSync();
@@ -90,8 +139,8 @@ void loadMonsterStats(n) {
     String monsterName = stats[0];
     int monsterHealth = int.parse(stats[1]);
     int attackMax = int.parse(stats[2]);
-    Monster monster = Monster(monsterName, monsterHealth, attackMax, 0);
-    print(attackMax);
+    Monster monster = Monster(monsterName: monsterName, monsterHealth: monsterHealth, attackMax: attackMax);
+    return monster;
   } catch (e) {
     print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
     exit(1);
@@ -99,7 +148,17 @@ void loadMonsterStats(n) {
 }
 
 void main() {
-  Game go1 = Game();
   Character character1 = loadCharacterStats();
-  go1.addCharacter(character1);
+  Game go1 = Game();
+  //String ex1 = go1.addCharacter(character1);
+  go1.firstTurn(character1);
+  Monster monster1 = loadMonsterStats(0);
+  go1.addMonster(monster1);
+  Monster monster2 = loadMonsterStats(1);
+  go1.addMonster(monster2);
+  Monster monster3 = loadMonsterStats(2);
+  go1.addMonster(monster3);
+  go1.getRandomMonster();
+
+  
 }
